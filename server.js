@@ -43,7 +43,7 @@ app.post("/", (req, res) => {
     console.log(file, output);
     execSync(`convert ${file} -resize ${scale * 100}% ${output}`);
     execSync(
-      `convert ${output} -crop 720x1280+${-1 * image.left}+${
+      `convert ${output} -crop 1080x1920+${-1 * image.left}+${
         -1 * image.top
       } ${outputCropped}`
     );
@@ -53,7 +53,7 @@ app.post("/", (req, res) => {
   });
 
   execSync(
-    `ffmpeg -y -r 7 -i images/tmp/cropped-${name}-%02d.jpg  -c:v libx264 -r 30 -pix_fmt yuv420p ${outputBasicLoop}`
+    `ffmpeg -y -r 7 -i images/tmp/cropped-${name}-%02d.jpg  -c:v libx264 -tune stillimage -crf 19 -r 30 -pix_fmt yuv420p ${outputBasicLoop}`
   );
   execSync(
     `ffmpeg -y -stream_loop 20 -i ${outputBasicLoop} -c copy ${outputLoop}`
